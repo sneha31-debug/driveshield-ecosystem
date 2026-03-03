@@ -107,6 +107,22 @@ export default function DriverProfiles() {
         <div className="driver-profiles-page">
             {/* Left: Driver List */}
             <div className="driver-list-panel card">
+                {/* Fleet stats strip — matches reference topbar */}
+                <div className="dp-fleet-stats">
+                    {[
+                        { label: 'Driving', value: 6, color: 'var(--teal-light)' },
+                        { label: 'At Risk', value: 2, color: 'var(--amber)' },
+                        { label: 'Critical', value: 1, color: 'var(--red)' },
+                        { label: 'Safe', value: 3, color: 'var(--green)' },
+                        { label: 'Idle', value: 4, color: 'var(--text-muted)' },
+                    ].map(s => (
+                        <div key={s.label} className="dp-fleet-stat">
+                            <span className="dp-fs-val" style={{ color: s.color }}>{s.value}</span>
+                            <span className="dp-fs-lbl">{s.label}</span>
+                        </div>
+                    ))}
+                </div>
+
                 <div className="list-search-wrap">
                     <input
                         className="list-search"
