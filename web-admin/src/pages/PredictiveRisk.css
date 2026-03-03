@@ -12,11 +12,12 @@
 }
 
 .chart-sub {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-muted);
     margin-top: 2px;
 }
 
+/* ── Chart tooltip ─────────────────────────────────────────────── */
 .custom-tt {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -31,6 +32,127 @@
     margin-bottom: 6px;
 }
 
+/* ── Intervention cards — driver rows matching reference ─────── */
+.interventions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.interventions-header .section-title {
+    margin-bottom: 0;
+}
+
+.interventions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.intervention-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px 16px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: all 0.18s;
+}
+
+.intervention-card:hover {
+    border-color: var(--border-accent);
+}
+
+.intervention-card--done {
+    opacity: 0.65;
+    border-color: var(--green);
+}
+
+.ic-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ic-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--teal-dim), var(--blue-dim));
+    border: 1px solid var(--border-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--teal-light);
+    flex-shrink: 0;
+}
+
+.ic-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ic-action {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.ic-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ic-risk-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 40px;
+}
+
+.ic-risk {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.ic-risk-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.start-btn {
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--teal);
+    color: #000;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.start-btn:hover {
+    background: var(--teal-light);
+}
+
+.start-btn--done {
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid var(--green);
+}
+
+/* ── Exposure bars ────────────────────────────────────────────── */
 .exposure-bars {
     display: flex;
     flex-direction: column;
@@ -47,7 +169,7 @@
 .exp-label {
     font-size: 12px;
     color: var(--text-secondary);
-    min-width: 95px;
+    min-width: 100px;
 }
 
 .exp-bar-wrap {
@@ -70,34 +192,8 @@
 
 .exp-amount {
     font-size: 12px;
-    font-weight: 600;
-    color: var(--amber);
-    min-width: 72px;
-    text-align: right;
-}
-
-.interventions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 8px;
-}
-
-.intervention-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.intervention-action {
-    flex: 1;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.intervention-impact {
-    font-size: 11px;
     font-weight: 700;
-    color: var(--green);
-    white-space: nowrap;
+    color: var(--amber);
+    min-width: 60px;
+    text-align: right;
 }
