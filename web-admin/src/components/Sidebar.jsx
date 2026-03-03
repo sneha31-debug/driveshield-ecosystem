@@ -2,11 +2,11 @@ import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
 
 const NAV_ITEMS = [
-    { to: '/', icon: '⌂', label: 'Command Center' },
-    { to: '/heatmap', icon: '🗺', label: 'Risk Heatmap' },
+    { to: '/', icon: '🏠', label: 'Command Center' },
+    { to: '/heatmap', icon: '🗺️', label: 'Risk Heatmap' },
     { to: '/drivers', icon: '👤', label: 'Driver Profiles' },
     { to: '/forecast', icon: '📈', label: 'Predictive Risk' },
-    { to: '/alerts', icon: '🚨', label: 'Alerts' },
+    { to: '/alerts', icon: '🔔', label: 'Alerts' },
     { to: '/trips', icon: '🚗', label: 'Trip Explorer' },
     { to: '/fleet', icon: '📊', label: 'Fleet Analytics' },
 ];
