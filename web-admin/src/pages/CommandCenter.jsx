@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart
 } from 'recharts';
@@ -117,6 +118,7 @@ function RiskIndexGauge({ value }) {
 /* ─── Expandable Driver Tile ─────────────────────────────────── */
 function DriverTile({ driver }) {
     const [expanded, setExpanded] = useState(false);
+    const navigate = useNavigate();
     const statusMap = {
         safe: { cls: 'badge-safe', icon: '🟢', label: 'Safe' },
         moderate: { cls: 'badge-moderate', icon: '🟡', label: 'At Risk' },
@@ -165,11 +167,12 @@ function DriverTile({ driver }) {
                         </div>
                     </div>
                     <div className="dte-actions">
-                        <button className="btn btn-ghost" style={{ fontSize: 11 }} onClick={e => e.stopPropagation()}>
+                        <button
+                            className="btn btn-ghost"
+                            style={{ fontSize: 11 }}
+                            onClick={e => { e.stopPropagation(); navigate('/drivers', { state: { driverId: driver.id } }); }}
+                        >
                             📋 View Profile
-                        </button>
-                        <button className="btn btn-ghost" style={{ fontSize: 11 }} onClick={e => e.stopPropagation()}>
-                            💬 Message Driver
                         </button>
                         {driver.status === 'critical' && (
                             <button className="btn btn-amber" style={{ fontSize: 11 }} onClick={e => e.stopPropagation()}>

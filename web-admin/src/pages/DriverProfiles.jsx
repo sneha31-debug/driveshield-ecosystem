@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
     RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer,
     LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid
@@ -90,8 +91,18 @@ function Sparkline({ data, color }) {
 }
 
 export default function DriverProfiles() {
+    const location = useLocation();
     const [selected, setSelected] = useState(DRIVERS[0]);
     const [search, setSearch] = useState('');
+
+    // Auto-select driver when navigated from Command Center
+    useEffect(() => {
+        const driverId = location.state?.driverId;
+        if (driverId) {
+            const found = DRIVERS.find(d => d.id === driverId);
+            if (found) setSelected(found);
+        }
+    }, [location.state]);
 
     const filtered = DRIVERS.filter(d =>
         d.name.toLowerCase().includes(search.toLowerCase()) ||
