@@ -6,12 +6,12 @@ import './CommandCenter.css';
 
 /* ─── Simulated data ─────────────────────────────────────────── */
 const DRIVER_TILES = [
-    { id: 'D001', name: 'Ravi Sharma', status: 'safe', score: 94, route: 'NH-48 → Gurgaon', speed: 62 },
-    { id: 'D002', name: 'Priya Nair', status: 'moderate', score: 71, route: 'Ring Road → Noida', speed: 78 },
-    { id: 'D003', name: 'Karan Mehta', status: 'critical', score: 43, route: 'Outer Ring → Thane', speed: 97 },
-    { id: 'D004', name: 'Anjali Singh', status: 'safe', score: 88, route: 'SH-1 → Pune', speed: 55 },
-    { id: 'D005', name: 'Deepak Rao', status: 'moderate', score: 65, route: 'BRTS → Ahmedabad', speed: 82 },
-    { id: 'D006', name: 'Meena Patel', status: 'safe', score: 91, route: 'Hosur Rd → Bengaluru', speed: 48 },
+    { id: 'D001', name: 'Ravi Sharma', status: 'safe', score: 94, route: 'NH-48 → Gurgaon', speed: 62, trips: 142, incident: 'None today', shift: 'Morning' },
+    { id: 'D002', name: 'Priya Nair', status: 'moderate', score: 71, route: 'Ring Road → Noida', speed: 78, trips: 98, incident: 'Harsh braking ×3', shift: 'Evening' },
+    { id: 'D003', name: 'Karan Mehta', status: 'critical', score: 43, route: 'Outer Ring → Thane', speed: 97, trips: 67, incident: 'Over-speed 97 km/h', shift: 'Night' },
+    { id: 'D004', name: 'Anjali Singh', status: 'safe', score: 88, route: 'SH-1 → Pune', speed: 55, trips: 113, incident: 'None today', shift: 'Morning' },
+    { id: 'D005', name: 'Deepak Rao', status: 'moderate', score: 65, route: 'BRTS → Ahmedabad', speed: 82, trips: 89, incident: 'Cont. driving 4h+', shift: 'Afternoon' },
+    { id: 'D006', name: 'Meena Patel', status: 'safe', score: 91, route: 'Hosur Rd → Bengaluru', speed: 48, trips: 157, incident: 'None today', shift: 'Morning' },
 ];
 
 const HIGH_RISK_TRIPS = [
@@ -24,7 +24,10 @@ function generatePulseData(prev) {
     const base = prev ? prev.slice(1) : [];
     const last = base.length ? base[base.length - 1].risk : 42;
     const newVal = Math.max(20, Math.min(80, last + (Math.random() - 0.5) * 8));
-    const point = { t: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }), risk: Math.round(newVal) };
+    const point = {
+        t: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        risk: Math.round(newVal),
+    };
     return [...base, point];
 }
 
@@ -33,7 +36,56 @@ const INITIAL_PULSE = Array.from({ length: 15 }, (_, i) => ({
     risk: Math.round(30 + Math.sin(i * 0.5) * 14 + Math.random() * 6),
 }));
 
-/* ─── Sub-components ─────────────────────────────────────────── */
+/* ─── Fleet Summary Bar ─────────────────────────────────────── */
+function FleetSummaryBar({ drivers }) {
+    const onRoad = drivers.length;
+    const idle = 4;
+    const safe = drivers.filter(d => d.status === 'safe').length;
+    const moderate = drivers.filter(d => d.status === 'moderate').length;
+    const critical = drivers.filter(d => d.status === 'critical').length;
+    const avgScore = Math.round(drivers.reduce((s, d) => s + d.score, 0) / drivers.length);
+
+    return (
+        <div className="fleet-summary-bar">
+            <div className="fsb-item">
+                <span className="fsb-value teal">{onRoad}</span>
+                <span className="fsb-label">On Road</span>
+            </div>
+            <div className="fsb-divider" />
+            <div className="fsb-item">
+                <span className="fsb-value muted">{idle}</span>
+                <span className="fsb-label">Idle</span>
+            </div>
+            <div className="fsb-divider" />
+            <div className="fsb-item">
+                <span className="fsb-value green">{safe}</span>
+                <span className="fsb-label">Safe</span>
+            </div>
+            <div className="fsb-divider" />
+            <div className="fsb-item">
+                <span className="fsb-value amber">{moderate}</span>
+                <span className="fsb-label">At Risk</span>
+            </div>
+            <div className="fsb-divider" />
+            <div className="fsb-item">
+                <span className="fsb-value red">{critical}</span>
+                <span className="fsb-label">Critical</span>
+            </div>
+            <div className="fsb-divider" />
+            <div className="fsb-item">
+                <span className="fsb-value teal">{avgScore}</span>
+                <span className="fsb-label">Avg Score</span>
+            </div>
+            <div className="fsb-divider" />
+            <div className="fsb-live">
+                <span className="pulse-dot" />
+                <span>Fleet Live — updating every 30s</span>
+            </div>
+        </div>
+    );
+}
+
+/* ─── Risk Gauge ─────────────────────────────────────────────── */
 function RiskIndexGauge({ value }) {
     const color = value >= 70 ? 'var(--red)' : value >= 50 ? 'var(--amber)' : 'var(--green)';
     const label = value >= 70 ? 'High Risk' : value >= 50 ? 'Moderate' : 'Healthy';
@@ -62,15 +114,22 @@ function RiskIndexGauge({ value }) {
     );
 }
 
+/* ─── Expandable Driver Tile ─────────────────────────────────── */
 function DriverTile({ driver }) {
+    const [expanded, setExpanded] = useState(false);
     const statusMap = {
-        safe: { cls: 'badge-safe', dot: 'var(--green)', icon: '🟢', label: 'Safe' },
-        moderate: { cls: 'badge-moderate', dot: 'var(--amber)', icon: '🟡', label: 'At Risk' },
-        critical: { cls: 'badge-critical', dot: 'var(--red)', icon: '🔴', label: 'Critical' },
+        safe: { cls: 'badge-safe', icon: '🟢', label: 'Safe' },
+        moderate: { cls: 'badge-moderate', icon: '🟡', label: 'At Risk' },
+        critical: { cls: 'badge-critical', icon: '🔴', label: 'Critical' },
     };
     const s = statusMap[driver.status];
+
     return (
-        <div className={`driver-tile driver-tile--${driver.status}`}>
+        <div
+            className={`driver-tile driver-tile--${driver.status} ${expanded ? 'expanded' : ''}`}
+            onClick={() => setExpanded(v => !v)}
+            style={{ cursor: 'pointer' }}
+        >
             <div className="driver-tile-top">
                 <div className="driver-avatar">{driver.name.charAt(0)}</div>
                 <div>
@@ -78,12 +137,48 @@ function DriverTile({ driver }) {
                     <p className="driver-id">{driver.id}</p>
                 </div>
                 <span className={`badge ${s.cls}`}>{s.icon} {s.label}</span>
+                <span className="tile-expand-icon">{expanded ? '▲' : '▼'}</span>
             </div>
             <div className="driver-tile-meta">
                 <span>📍 {driver.route}</span>
                 <span>⚡ {driver.speed} km/h</span>
                 <span className="driver-score">Score: <b>{driver.score}</b></span>
             </div>
+
+            {/* Expanded details */}
+            {expanded && (
+                <div className="driver-tile-expanded">
+                    <div className="dte-row">
+                        <div className="dte-item">
+                            <span className="dte-label">Shift</span>
+                            <span className="dte-val">{driver.shift}</span>
+                        </div>
+                        <div className="dte-item">
+                            <span className="dte-label">Total Trips</span>
+                            <span className="dte-val">{driver.trips}</span>
+                        </div>
+                        <div className="dte-item">
+                            <span className="dte-label">Today's Incident</span>
+                            <span className="dte-val" style={{ color: driver.incident === 'None today' ? 'var(--green)' : 'var(--amber)' }}>
+                                {driver.incident}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="dte-actions">
+                        <button className="btn btn-ghost" style={{ fontSize: 11 }} onClick={e => e.stopPropagation()}>
+                            📋 View Profile
+                        </button>
+                        <button className="btn btn-ghost" style={{ fontSize: 11 }} onClick={e => e.stopPropagation()}>
+                            💬 Message Driver
+                        </button>
+                        {driver.status === 'critical' && (
+                            <button className="btn btn-amber" style={{ fontSize: 11 }} onClick={e => e.stopPropagation()}>
+                                ⚠ Intervene Now
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
@@ -93,11 +188,6 @@ export default function CommandCenter() {
     const [pulseData, setPulseData] = useState(INITIAL_PULSE);
     const [fleetRisk] = useState(54);
 
-    const onRoad = DRIVER_TILES.filter(d => d.status !== 'idle').length;
-    const safe = DRIVER_TILES.filter(d => d.status === 'safe').length;
-    const moderate = DRIVER_TILES.filter(d => d.status === 'moderate').length;
-    const critical = DRIVER_TILES.filter(d => d.status === 'critical').length;
-
     useEffect(() => {
         const id = setInterval(() => setPulseData(prev => generatePulseData(prev)), 2500);
         return () => clearInterval(id);
@@ -105,26 +195,30 @@ export default function CommandCenter() {
 
     return (
         <div className="command-center">
+
+            {/* ── Fleet Summary Bar ── */}
+            <FleetSummaryBar drivers={DRIVER_TILES} />
+
             {/* ── Row 1: KPI Bar ── */}
             <div className="kpi-bar grid-4">
                 <div className="card card-sm stat-card">
-                    <span className="stat-label">On Road Now</span>
-                    <span className="stat-value" style={{ color: 'var(--teal)' }}>{onRoad}</span>
-                    <span className="stat-delta delta-neu">/ {DRIVER_TILES.length} total</span>
+                    <span className="stat-label">Total Fleet Vehicles</span>
+                    <span className="stat-value" style={{ color: 'var(--teal)' }}>10</span>
+                    <span className="stat-delta delta-neu">6 active · 4 idle</span>
                 </div>
                 <div className="card card-sm stat-card">
-                    <span className="stat-label">🟢 Safe</span>
-                    <span className="stat-value" style={{ color: 'var(--green)' }}>{safe}</span>
+                    <span className="stat-label">🟢 Safe Drivers</span>
+                    <span className="stat-value" style={{ color: 'var(--green)' }}>3</span>
                     <span className="stat-delta delta-up">↑ Driving normally</span>
                 </div>
                 <div className="card card-sm stat-card">
                     <span className="stat-label">🟡 At Risk</span>
-                    <span className="stat-value" style={{ color: 'var(--amber)' }}>{moderate}</span>
+                    <span className="stat-value" style={{ color: 'var(--amber)' }}>2</span>
                     <span className="stat-delta delta-down">↓ Monitor needed</span>
                 </div>
                 <div className="card card-sm stat-card">
                     <span className="stat-label">🔴 Critical</span>
-                    <span className="stat-value" style={{ color: 'var(--red)' }}>{critical}</span>
+                    <span className="stat-value" style={{ color: 'var(--red)' }}>1</span>
                     <span className="stat-delta delta-down">⚠ Intervene now</span>
                 </div>
             </div>
@@ -136,9 +230,9 @@ export default function CommandCenter() {
                     <div className="gauge-row">
                         <RiskIndexGauge value={fleetRisk} />
                         <div className="gauge-legend">
-                            <LegendRow color="var(--green)" label="Healthy" range="0-49" />
-                            <LegendRow color="var(--amber)" label="Moderate" range="50-69" />
-                            <LegendRow color="var(--red)" label="High Risk" range="70-100" />
+                            <LegendRow color="var(--green)" label="Healthy" range="0–49" />
+                            <LegendRow color="var(--amber)" label="Moderate" range="50–69" />
+                            <LegendRow color="var(--red)" label="High Risk" range="70–100" />
                             <div className="divider" />
                             <p className="gauge-note">Weighted across all active drivers. Updated every 30 s.</p>
                         </div>
@@ -166,12 +260,9 @@ export default function CommandCenter() {
                                 itemStyle={{ color: 'var(--teal)' }}
                             />
                             <Area
-                                type="monotone"
-                                dataKey="risk"
-                                stroke="var(--teal)"
-                                strokeWidth={2}
-                                fill="url(#pulseGrad)"
-                                dot={false}
+                                type="monotone" dataKey="risk"
+                                stroke="var(--teal)" strokeWidth={2}
+                                fill="url(#pulseGrad)" dot={false}
                                 isAnimationActive={false}
                             />
                         </AreaChart>
@@ -183,8 +274,8 @@ export default function CommandCenter() {
             {/* ── Row 3: Live Driver Tiles ── */}
             <div className="card">
                 <div className="section-header">
-                    <p className="section-title">Live Driver Status</p>
-                    <span className="live-badge"><span className="pulse-dot" /> {onRoad} on road</span>
+                    <p className="section-title">Live Driver Status <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>— click a tile to expand</span></p>
+                    <span className="live-badge"><span className="pulse-dot" /> 6 on road</span>
                 </div>
                 <div className="drivers-grid">
                     {DRIVER_TILES.map(d => <DriverTile key={d.id} driver={d} />)}
@@ -212,6 +303,7 @@ export default function CommandCenter() {
                     ))}
                 </div>
             </div>
+
         </div>
     );
 }

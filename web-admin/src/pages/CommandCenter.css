@@ -4,6 +4,81 @@
     gap: 20px;
 }
 
+/* ── Fleet Summary Bar ─────────────────────────────────────── */
+.fleet-summary-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 24px;
+    backdrop-filter: blur(12px);
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.fsb-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 20px;
+}
+
+.fsb-value {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.fsb-value.teal {
+    color: var(--teal-light);
+}
+
+.fsb-value.green {
+    color: var(--green);
+}
+
+.fsb-value.amber {
+    color: var(--amber);
+}
+
+.fsb-value.red {
+    color: var(--red);
+}
+
+.fsb-value.muted {
+    color: var(--text-muted);
+}
+
+.fsb-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 3px;
+}
+
+.fsb-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+.fsb-live {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 500;
+    margin-left: auto;
+    padding-left: 20px;
+}
+
 /* Gauge */
 .gauge-card .gauge-row {
     display: flex;
@@ -59,8 +134,6 @@
 }
 
 /* Pulse card */
-.pulse-card {}
-
 .pulse-header {
     display: flex;
     align-items: center;
@@ -102,7 +175,7 @@
 /* Driver Tiles Grid */
 .drivers-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
     gap: 12px;
 }
 
@@ -114,7 +187,17 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    user-select: none;
+}
+
+.driver-tile:hover {
+    border-color: var(--border-accent);
+}
+
+.driver-tile.expanded {
+    border-color: var(--teal);
+    box-shadow: 0 0 16px rgba(20, 184, 166, 0.12);
 }
 
 .driver-tile--safe {
@@ -127,9 +210,6 @@
 
 .driver-tile--critical {
     border-left: 3px solid var(--red);
-}
-
-.driver-tile--critical {
     animation: pulse-border 2s ease-in-out infinite;
 }
 
@@ -181,6 +261,12 @@
     margin-left: auto;
 }
 
+.tile-expand-icon {
+    font-size: 10px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
 .driver-tile-meta {
     display: flex;
     gap: 12px;
@@ -192,6 +278,47 @@
 .driver-score b {
     color: var(--teal-light);
     font-weight: 700;
+}
+
+/* Expanded section */
+.driver-tile-expanded {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    animation: fadeInUp 0.2s ease;
+}
+
+.dte-row {
+    display: flex;
+    gap: 16px;
+}
+
+.dte-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dte-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.dte-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.dte-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 /* High-risk trips */
