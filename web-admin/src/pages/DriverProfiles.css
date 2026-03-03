@@ -1,0 +1,265 @@
+.driver-profiles-page {
+    display: flex;
+    gap: 20px;
+    height: calc(100vh - 120px);
+}
+
+/* Left panel */
+.driver-list-panel {
+    width: 240px;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    overflow: hidden;
+}
+
+.list-search-wrap {
+    flex-shrink: 0;
+}
+
+.list-search {
+    width: 100%;
+    background: var(--bg-glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    color: var(--text-primary);
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.list-search:focus {
+    border-color: var(--teal);
+}
+
+.driver-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.driver-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+}
+
+.driver-list-item:hover {
+    background: var(--bg-glass);
+    color: var(--text-primary);
+}
+
+.driver-list-item.active {
+    background: var(--teal-dim);
+    border-color: var(--teal);
+    color: var(--text-primary);
+}
+
+.dli-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-dim), var(--blue-dim));
+    border: 1px solid var(--border-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--teal-light);
+    flex-shrink: 0;
+}
+
+.dli-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.dli-name {
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dli-id {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.dli-right {
+    flex-shrink: 0;
+}
+
+/* Right detail panel */
+.driver-detail-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+}
+
+.driver-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ddh-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.ddh-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 0 24px rgba(20, 184, 166, 0.3);
+}
+
+.ddh-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.ddh-id {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.ddh-stats {
+    display: flex;
+    gap: 32px;
+}
+
+/* DNA metrics */
+.dna-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.dna-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dna-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    min-width: 110px;
+}
+
+.dna-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.dna-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-glass);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.dna-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.6s ease;
+}
+
+.dna-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 26px;
+    text-align: right;
+}
+
+.dna-trend {
+    font-size: 14px;
+    font-weight: 700;
+    min-width: 16px;
+    text-align: center;
+}
+
+/* Confidence */
+.confidence-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.confidence-track {
+    height: 12px;
+    background: var(--bg-glass);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+}
+
+.confidence-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.8s ease;
+}
+
+.confidence-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.confidence-value {
+    font-weight: 700;
+    color: var(--teal-light);
+}
+
+/* AI insight */
+.ai-insight-card {}
+
+.ai-quote {
+    margin-top: 10px;
+    padding: 14px 16px;
+    background: var(--bg-glass);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-style: italic;
+}

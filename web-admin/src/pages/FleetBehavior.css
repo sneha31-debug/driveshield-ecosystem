@@ -1,0 +1,66 @@
+.fleet-behavior-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.breakdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.breakdown-header .section-title {
+    margin-bottom: 0;
+}
+
+.breakdown-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.breakdown-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bd-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    min-width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bd-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-glass);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.bd-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.6s ease;
+}
+
+.bd-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 24px;
+    text-align: right;
+}
+
+.coaching-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
