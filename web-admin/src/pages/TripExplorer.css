@@ -4,14 +4,31 @@
     height: calc(100vh - 120px);
 }
 
+/* ── Left: Trip List ─────────────────────────────────────────── */
 .trip-list-panel {
-    width: 260px;
-    min-width: 260px;
-    padding: 16px;
+    width: 270px;
+    min-width: 270px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 16px;
     overflow: hidden;
+}
+
+.trip-search {
+    width: 100%;
+    background: var(--bg-glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    color: var(--text-primary);
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.trip-search:focus {
+    border-color: var(--teal);
 }
 
 .trip-list {
@@ -43,6 +60,11 @@
     background: var(--teal-dim);
 }
 
+.trip-list-item.compared {
+    border-color: var(--amber);
+    background: var(--amber-dim);
+}
+
 .tli-top {
     display: flex;
     align-items: center;
@@ -61,6 +83,15 @@
     font-weight: 800;
 }
 
+.flag-chip {
+    font-size: 12px;
+    background: var(--red-dim);
+    color: var(--red);
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
 .tli-route {
     font-size: 11px;
     color: var(--text-secondary);
@@ -71,53 +102,82 @@
     color: var(--text-muted);
 }
 
-.tli-compare-btn {
+.compare-btn {
     font-size: 10px;
-    padding: 3px 8px;
-    margin-top: 4px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--bg-glass);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
     align-self: flex-start;
+    margin-top: 2px;
 }
 
-/* Detail area */
+.compare-btn:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+}
+
+.compare-btn--on {
+    background: var(--amber-dim);
+    color: var(--amber);
+    border-color: var(--amber);
+}
+
+/* ── Right: Detail Area ─────────────────────────────────────── */
 .trip-detail-area {
     flex: 1;
     overflow-y: auto;
 }
 
+.compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+/* ── Trip Detail Card ────────────────────────────────────────── */
 .trip-detail {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    height: 100%;
-    overflow-y: auto;
+    gap: 16px;
+    height: fit-content;
 }
 
 .trip-detail--compare {
-    border-color: var(--amber-dim);
+    border-color: var(--amber);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.1);
 }
 
 .td-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 4px;
+    gap: 12px;
 }
 
 .td-driver {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
 }
 
 .td-route {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-secondary);
     margin-top: 2px;
 }
 
-.td-meta {
+.td-meta-row {
+    display: flex;
+    gap: 12px;
     font-size: 11px;
     color: var(--text-muted);
-    margin-top: 4px;
+    margin-top: 6px;
+    flex-wrap: wrap;
 }
 
 .td-score-badge {
@@ -125,9 +185,10 @@
     flex-direction: column;
     align-items: center;
     background: var(--bg-glass);
-    border-radius: var(--radius-md);
-    padding: 10px 16px;
     border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 18px;
+    flex-shrink: 0;
 }
 
 .td-score {
@@ -144,6 +205,7 @@
     margin-top: 2px;
 }
 
+/* Insurance flag */
 .flag-banner {
     display: flex;
     align-items: center;
@@ -155,48 +217,130 @@
     font-size: 12px;
     color: var(--red);
     font-weight: 500;
-    margin-top: 10px;
+}
+
+/* Chart section */
+.chart-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chart-legend-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cl-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.cl-line {
+    width: 18px;
+    height: 2px;
+    border-radius: 99px;
+    display: inline-block;
+}
+
+.cl-bar {
+    width: 8px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.cl-ref {
+    font-size: 10px;
+    color: var(--red);
+    opacity: 0.7;
+}
+
+/* Chart tooltip */
+.chart-tt {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 12px;
+}
+
+.chart-tt .tt-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    font-size: 11px;
 }
 
 /* Timeline */
+.timeline-section {
+    display: flex;
+    flex-direction: column;
+}
+
 .td-timeline {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 8px;
 }
 
 .timeline-item {
     display: flex;
+    gap: 12px;
     align-items: flex-start;
-    gap: 10px;
 }
 
-.timeline-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-top: 3px;
+.timeline-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     flex-shrink: 0;
+    width: 24px;
 }
 
-.dot-start {
-    background: var(--green);
-    box-shadow: 0 0 6px var(--green);
+.timeline-icon {
+    font-size: 16px;
+    line-height: 1;
 }
 
-.dot-end {
-    background: var(--teal);
-    box-shadow: 0 0 6px var(--teal);
+.timeline-line {
+    width: 2px;
+    flex: 1;
+    min-height: 16px;
+    background: var(--border);
+    margin: 3px 0;
 }
 
-.dot-event {
-    background: var(--amber);
-    box-shadow: 0 0 6px var(--amber);
+.timeline-body {
+    padding-bottom: 14px;
+    flex: 1;
+}
+
+.timeline-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
 }
 
 .timeline-event {
     font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.timeline-time {
+    font-size: 10px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.timeline-loc {
+    font-size: 11px;
     color: var(--text-secondary);
-    line-height: 1.5;
+    margin-top: 2px;
 }
